@@ -2,6 +2,7 @@ package macauyeah.personal.springdemo.lambda;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class Car {
     private List<Wheel> wheels = new ArrayList<>();
@@ -18,4 +19,8 @@ public class Car {
         this.getWheels().add(wheel);
     }
 
+    // open converter?
+    public <R> R map(Function<Car, R> functional) {
+        return functional.apply(this);
+    }
 }

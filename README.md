@@ -1,1 +1,1 @@
-# example for spring boot data jpa
+# example for spring boot application

@@ -80,15 +80,16 @@ public class Factory {
         // many other logic
         // many other logic
         // many other logic
+        List<Wheel> wheels = new ArrayList<>(4);
         cars = cars.stream().filter(
-            filterCarByWheelSizePredicate()
+            filterCarByWheelSizePredicate(wheels)
         ).toList();
         return cars;
     }
 
-    private static Predicate<Car> filterCarByWheelSizePredicate(){
+    private static Predicate<Car> filterCarByWheelSizePredicate(List<Wheel> wheels){
         return (car) -> {
-            if (car.getWheels().size() == 4) {
+            if (car.getWheels().size() == wheels.size()) {
                 // many other check logics
                 // many other check logics
                 // many other check logics
