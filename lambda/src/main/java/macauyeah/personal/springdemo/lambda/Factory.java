@@ -3,6 +3,9 @@ package macauyeah.personal.springdemo.lambda;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import macauyeah.personal.springdemo.lambda.FilterList.FilterList;
 
 public class Factory {
     // ex1
@@ -97,5 +100,34 @@ public class Factory {
             }
             return false;
         };
+    }
+
+
+    // ex6
+    public static List<Car> manyListFiltering() {
+        List<Wheel> wheels = new ArrayList<>(4);
+        wheels = wheels.stream().filter((wheel)->{
+            // some logic
+            return true;
+        }).collect(Collectors.toList());
+        List<Car> cars = new ArrayList<>();
+        cars = cars.stream().filter(
+            filterCarByWheelSizePredicate(wheels)
+        ).collect(Collectors.toList());
+
+        // many list filtering will gave you many repeating code like stream(), collect()
+        return cars;
+    }
+
+    // ex7
+    public static List<Car> manyListFilteringByExtendArayList() {
+        FilterList<Wheel> wheels = new FilterList<>(4);
+        wheels = wheels.filter((wheel)->{
+            // some logic
+            return true;
+        });
+        FilterList<Car> cars = new FilterList<>();
+        cars = cars.filter(filterCarByWheelSizePredicate(wheels));
+        return cars;
     }
 }
