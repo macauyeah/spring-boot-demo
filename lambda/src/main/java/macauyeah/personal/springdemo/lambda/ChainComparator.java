@@ -79,14 +79,26 @@ public class ChainComparator {
     }
 
     private static Comparator<Car> getComparatorChain2(){
-        Comparator<Car> chainedComparator = Comparator.comparing(car->car.getSize(), ChainComparator.getComparatorDouble());
-        chainedComparator = chainedComparator.thenComparing(car->car.getWheels().size(), ChainComparator.getComparatorInteger());
+        Comparator<Car> chainedComparator = Comparator.comparing(
+            car->car.getSize(), // converter
+            ChainComparator.getComparatorDouble() // reuse exisiting comparator
+        );
+        chainedComparator = chainedComparator.thenComparing(
+            car->car.getWheels().size(), // converter
+            ChainComparator.getComparatorInteger() // reuse exisiting comparator
+        );
         return chainedComparator;
     }
 
     private static Comparator<Car> getComparatorChain3(){
-        Comparator<Car> chainedComparator = Comparator.comparing(car->car.getWheels().size(), ChainComparator.getComparatorInteger());
-        chainedComparator = chainedComparator.thenComparing(car->car.getSize(), ChainComparator.getComparatorDouble());
+        Comparator<Car> chainedComparator = Comparator.comparing(
+            car->car.getWheels().size(), // converter
+            ChainComparator.getComparatorInteger() // reuse exisiting comparator
+        );
+        chainedComparator = chainedComparator.thenComparing(
+            car->car.getSize(), // converter
+            ChainComparator.getComparatorDouble() // reuse exisiting comparator
+        );
         return chainedComparator;
     }
 }
