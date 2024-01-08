@@ -1,4 +1,4 @@
-package macauyeah.personal.springdemo.lambda;
+package io.github.macauyeah.springbootdemo.lambda;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -30,7 +30,7 @@ public class ChainComparator {
         System.out.println("----------");
     }
 
-    private static Comparator<Car> getOldSchoolComparator(){
+    public static Comparator<Car> getOldSchoolComparator(){
         return (a, b)->{
             Double aCarSize = a.getSize();
             Double bCarSize = b.getSize();
@@ -60,7 +60,7 @@ public class ChainComparator {
         };
     }
 
-    private static Comparator<Car> getComparatorChain(){
+    public static Comparator<Car> getComparatorChain(){
         return ChainComparator.getComparatorCarSize()
             .thenComparing(ChainComparator.getComparatorNumOfWheels());
     }
@@ -78,7 +78,7 @@ public class ChainComparator {
         };
     }
 
-    private static Comparator<Car> getComparatorChain2(){
+    public static Comparator<Car> getComparatorChain2(){
         Comparator<Car> chainedComparator = Comparator.comparing(
             car->car.getSize(), // converter
             ChainComparator.getComparatorDouble() // reuse exisiting comparator
@@ -90,7 +90,7 @@ public class ChainComparator {
         return chainedComparator;
     }
 
-    private static Comparator<Car> getComparatorChain3(){
+    public static Comparator<Car> getComparatorChain3(){
         Comparator<Car> chainedComparator = Comparator.comparing(
             car->car.getWheels().size(), // converter
             ChainComparator.getComparatorInteger() // reuse exisiting comparator

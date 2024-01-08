@@ -1,4 +1,4 @@
-package macauyeah.personal.springdemo.lambda;
+package io.github.macauyeah.springbootdemo.lambda;
 
 import java.util.ArrayList;
 import java.util.List;

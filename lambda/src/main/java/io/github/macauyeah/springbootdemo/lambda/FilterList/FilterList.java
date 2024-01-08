@@ -1,4 +1,4 @@
-package macauyeah.personal.springdemo.lambda.FilterList;
+package io.github.macauyeah.springbootdemo.lambda.FilterList;
 
 import java.util.ArrayList;
 import java.util.Collection;

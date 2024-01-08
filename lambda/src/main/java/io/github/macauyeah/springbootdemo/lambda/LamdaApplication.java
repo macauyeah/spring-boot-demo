@@ -1,4 +1,4 @@
-package macauyeah.personal.springdemo.lambda;
+package io.github.macauyeah.springbootdemo.lambda;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

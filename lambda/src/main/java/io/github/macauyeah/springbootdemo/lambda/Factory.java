@@ -1,11 +1,11 @@
-package macauyeah.personal.springdemo.lambda;
+package io.github.macauyeah.springbootdemo.lambda;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import macauyeah.personal.springdemo.lambda.FilterList.FilterList;
+import io.github.macauyeah.springbootdemo.lambda.FilterList.FilterList;
 
 public class Factory {
     // ex1

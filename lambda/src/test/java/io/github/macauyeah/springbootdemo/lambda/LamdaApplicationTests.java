@@ -1,4 +1,4 @@
-package macauyeah.personal.springdemo.lambda;
+package io.github.macauyeah.springbootdemo.lambda;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
