@@ -1,7 +1,5 @@
 package io.github.macauyeah.springboot.tutorial.commandline;
 
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -21,11 +19,10 @@ public class CommandlineApplication implements ApplicationRunner {
 	// java -jar target/commandline-0.0.1-SNAPSHOT.jar --JarCommandOptions=test --JarCommandOptions=test2 --SomeCommandOptions=some --SomeCommandOptions=some2
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		Set<String> options = args.getOptionNames();
-		options.stream().forEach(option -> {
-			LOG.debug("option name:" + option);
+		args.getOptionNames().stream().forEach(optionName -> {
+			LOG.debug("option name:" + optionName);
 
-			args.getOptionValues(option).forEach(optionValue -> {
+			args.getOptionValues(optionName).forEach(optionValue -> {
 				LOG.debug("option values:" + optionValue);
 			});
 		});
