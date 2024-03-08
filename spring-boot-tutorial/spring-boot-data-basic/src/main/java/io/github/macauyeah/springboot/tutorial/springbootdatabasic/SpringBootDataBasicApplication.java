@@ -1,4 +1,4 @@
-package io.github.macauyeah.spring.tutorial.springbootdatabasic;
+package io.github.macauyeah.springboot.tutorial.springbootdatabasic;
 
 import java.util.UUID;
 
