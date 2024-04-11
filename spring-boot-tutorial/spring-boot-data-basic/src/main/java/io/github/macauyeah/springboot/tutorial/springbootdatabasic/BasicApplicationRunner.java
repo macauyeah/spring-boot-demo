@@ -12,11 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("!skip")
 public class BasicApplicationRunner implements ApplicationRunner {
-    @Autowired
+	@Autowired
 	private AppleRepo appleRepo;
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-    @Override
+
+	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		Apple apple = new Apple();
 		apple.setUuid(UUID.randomUUID().toString());
@@ -32,8 +33,7 @@ public class BasicApplicationRunner implements ApplicationRunner {
 		dump();
 	}
 
-
-	private void dump(){
+	private void dump() {
 		jdbcTemplate.execute("SCRIPT TO 'dump.sql'");
 	}
 }
