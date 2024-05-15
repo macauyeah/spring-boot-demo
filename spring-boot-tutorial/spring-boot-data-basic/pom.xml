@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.1</version>
+		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>io.github.macauyeah.spring.tutorial</groupId>
+	<groupId>io.github.macauyeah.springboot.tutorial</groupId>
 	<artifactId>spring-boot-data-basic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot-data-basic</name>
