@@ -1,5 +1,6 @@
 package io.github.macauyeah.jpaspecification;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,34 +24,36 @@ public class DynamicSpecification {
             From<?, ?> joinObject,
             CriteriaBuilder builder,
             SearchSchema searchSchema) {
-
-        Predicate ret = searchPath(joinObject, builder, searchSchema);
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.addAll(
+                searchPath(joinObject, builder, searchSchema));
 
         List<Predicate> joinPredicates = searchSchema.getJoinValues().entrySet().stream().map(
                 (mapEntry) -> {
                     Join<Object, Object> joinResult = joinObject.join(mapEntry.getKey());
                     return searchJoin(joinResult, builder, mapEntry.getValue());
                 }).collect(Collectors.toList());
-
-        ret = combinePredicatesWithAndOperator(builder, ret, joinPredicates);
-        return ret;
+        predicates.addAll(joinPredicates);
+        return combinePredicatesWithAndOperator(builder, predicates);
     }
 
-    private static Predicate searchPath(
+    private static List<Predicate> searchPath(
             Path<?> path,
             CriteriaBuilder builder,
             SearchSchema searchSchema) {
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.addAll(
+                getStringPredicates(
+                        searchSchema,
+                        path,
+                        builder));
 
-        Predicate ret = builder.and();
-        List<Predicate> strPredicates = getStringPredicates(
-                searchSchema,
-                path,
-                builder);
-
-        ret = combinePredicatesWithAndOperator(builder, ret, strPredicates);
-        ret = combinePredicatesWithAndOperator(builder, ret, getDatePredicates(searchSchema, path, builder));
-
-        return ret;
+        predicates.addAll(
+                getDatePredicates(
+                        searchSchema,
+                        path,
+                        builder));
+        return predicates;
     }
 
     private static List<Predicate> getStringPredicates(
@@ -129,12 +132,7 @@ public class DynamicSpecification {
     }
 
     private static Predicate combinePredicatesWithAndOperator(CriteriaBuilder builder,
-            Predicate head,
             List<Predicate> predicates) {
-        Predicate ret = head;
-        for (Predicate joinPredicate : predicates) {
-            ret = builder.and(ret, joinPredicate);
-        }
-        return ret;
+        return builder.and(predicates.toArray(new Predicate[0]));
     }
 }
