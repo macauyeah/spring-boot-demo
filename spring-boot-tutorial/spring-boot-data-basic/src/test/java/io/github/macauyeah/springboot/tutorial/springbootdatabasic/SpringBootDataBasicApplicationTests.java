@@ -1,7 +1,8 @@
 package io.github.macauyeah.springboot.tutorial.springbootdatabasic;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +14,12 @@ class SpringBootDataBasicApplicationTests {
 
 	@Test
 	void contextLoads() {
-		assertTrue(appleRepo.count() > 0);
+		assertEquals(2, appleRepo.count());
+	}
+
+	@AfterEach
+	void tearDown() {
+		appleRepo.deleteAll();
 	}
 
 }
