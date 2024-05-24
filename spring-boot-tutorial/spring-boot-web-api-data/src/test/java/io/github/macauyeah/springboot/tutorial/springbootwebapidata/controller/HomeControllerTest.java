@@ -19,17 +19,43 @@ public class HomeControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void testReadSomeRecord() throws Exception {
+    void testNoLogin() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
                 .contentType(MediaType.APPLICATION_JSON);
         this.mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.ret").doesNotExist())
                 .andDo(MockMvcResultHandlers.print());
+    }
 
-        requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
+    @Test
+    void testLoginWithRoles() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
                 .contentType(MediaType.APPLICATION_JSON).with(
-                        SecurityMockMvcRequestPostProcessors.user("admin").password("pass").roles("USER", "ADMIN"));
+                        SecurityMockMvcRequestPostProcessors.user("someone")
+                                .roles("USER", "ADMIN"));
+        this.mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value("your uuid:1234"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void testLoginWithWrongPasswordAndNoRole() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
+                .contentType(MediaType.APPLICATION_JSON).with(
+                        SecurityMockMvcRequestPostProcessors.user("admin").password("wrongpass"));
+        this.mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value("your uuid:1234"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void testLoginWithPassword() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
+                .contentType(MediaType.APPLICATION_JSON).with(
+                        SecurityMockMvcRequestPostProcessors.user("admin").password("pass"));
         this.mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value("your uuid:1234"))
