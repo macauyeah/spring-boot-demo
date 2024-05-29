@@ -43,19 +43,18 @@ public class HomeControllerTest {
     @Test
     void testLoginWithWrongPasswordAndNoRole() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
-                .contentType(MediaType.APPLICATION_JSON).with(
-                        SecurityMockMvcRequestPostProcessors.user("admin").password("wrongpass"));
+                .header("Authorization", "Basic randompass")
+                .contentType(MediaType.APPLICATION_JSON);
         this.mockMvc.perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value("your uuid:1234"))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     void testLoginWithPassword() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
-                .contentType(MediaType.APPLICATION_JSON).with(
-                        SecurityMockMvcRequestPostProcessors.user("admin").password("pass"));
+                .header("Authorization", "Basic YWRtaW46cGFzcw==") // http auth with admin:pass
+                .contentType(MediaType.APPLICATION_JSON);
         this.mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value("your uuid:1234"))
