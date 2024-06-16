@@ -50,14 +50,26 @@ public class HomeControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
+//     @Test
+//     void testLoginWithPassword() throws Exception {
+//         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
+//                 .header("Authorization", "Basic YWRtaW46cGFzcw==") // http auth with admin:pass
+//                 .contentType(MediaType.APPLICATION_JSON);
+//         this.mockMvc.perform(requestBuilder)
+//                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+//                 .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value("your uuid:1234"))
+//                 .andDo(MockMvcResultHandlers.print());
+//     }
+
     @Test
-    void testLoginWithPassword() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/someRecord/1234")
+    void testGetVersion() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/version")
                 .header("Authorization", "Basic YWRtaW46cGFzcw==") // http auth with admin:pass
                 .contentType(MediaType.APPLICATION_JSON);
         this.mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value("your uuid:1234"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.projectVersion").value("0.0.1-SNAPSHOT"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gitBuildVersion").value("local-build"))
                 .andDo(MockMvcResultHandlers.print());
     }
 }
