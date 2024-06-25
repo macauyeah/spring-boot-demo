@@ -6,7 +6,7 @@ ARG gitBuildVersion=default-docker-build
 RUN --mount=type=cache,target=/root/.m2/repository/ mvn clean compile package -P ${mavenProfile} -Dgit.build.version=${gitBuildVersion} -Dmaven.test.skip=true
 
 FROM eclipse-temurin:17.0.10_7-jdk-jammy
-COPY --from=backend-build /opt/sourceCode/spring-boot-web-api-data/target/spring-boot-web-api-data.war /opt/spring-boot-web-api-data.war
+COPY --from=backend-build /opt/sourceCode/spring-boot-web-api-data/target/spring-boot-web-api-data-0.0.1-SNAPSHOT.war /opt/spring-boot-web-api-data.war
 WORKDIR /opt/
 ENTRYPOINT ["java", "-jar", "spring-boot-web-api-data.war"]
 
