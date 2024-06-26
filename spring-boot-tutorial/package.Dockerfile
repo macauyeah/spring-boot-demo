@@ -11,4 +11,10 @@ WORKDIR /opt/
 ENTRYPOINT ["java", "-jar", "spring-boot-web-api-data.war"]
 
 HEALTHCHECK --interval=60s --timeout=10s --retries=5 --start-period=30s \
-  CMD curl --fail-with-body localhost:8080/api/version || exit 1
+  CMD curl --fail-with-body -u "admin:pass" localhost:8080/api/version || exit 1
+
+# >docker image build -t package -f package.Dockerfile
+# or
+# >podman image build -t package -f package.Dockerfile --format docker
+# >podman container run --rm package
+# >podman builder prune -af
