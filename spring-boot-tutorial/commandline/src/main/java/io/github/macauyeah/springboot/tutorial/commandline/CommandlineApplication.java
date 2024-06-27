@@ -20,10 +20,10 @@ public class CommandlineApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		args.getOptionNames().stream().forEach(optionName -> {
-			LOG.debug("option name:" + optionName);
+			LOG.debug("option name:{}", optionName);
 
 			args.getOptionValues(optionName).forEach(optionValue -> {
-				LOG.debug("option values:" + optionValue);
+				LOG.debug("option values:{}", optionValue);
 			});
 		});
 		LOG.debug("program end.");
