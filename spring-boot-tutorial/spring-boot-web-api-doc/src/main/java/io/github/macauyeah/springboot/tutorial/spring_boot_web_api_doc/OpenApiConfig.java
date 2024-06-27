@@ -14,6 +14,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         Server server = new Server();
         server.setUrl("http://localhost:9000/proxy/8080/");
+        // and paste http://localhost:9000/proxy/8080/v3/api-docs to the swagger-ui "explore" 
         return new OpenAPI().servers(List.of(server));
     }
 
