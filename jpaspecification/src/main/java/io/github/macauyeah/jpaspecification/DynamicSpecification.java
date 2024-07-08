@@ -113,6 +113,15 @@ public class DynamicSpecification {
                             mapEntry.getKey(),
                             mapEntry.getValue());
                 }).collect(Collectors.toList()));
+        predicates.addAll(searchSchema.getDateBetween().entrySet().stream().map(
+                (mapEntry) -> {
+                    return generateBetweenPredicate(
+                            path,
+                            builder,
+                            mapEntry.getKey(),
+                            mapEntry.getValue().getLowerBound(),
+                            mapEntry.getValue().getUpperBound());
+                }).collect(Collectors.toList()));
         return predicates;
     }
 
@@ -129,6 +138,11 @@ public class DynamicSpecification {
     private static <Y extends Comparable<? super Y>> Predicate generateLessThanPredicate(
             Path<?> path, CriteriaBuilder cb, String key, Y value) {
         return cb.lessThan(path.<Y>get(key), value);
+    }
+
+    private static <Y extends Comparable<? super Y>> Predicate generateBetweenPredicate(
+            Path<?> path, CriteriaBuilder cb, String key, Y lower, Y upper) {
+        return cb.between(path.<Y>get(key), lower, upper);
     }
 
     private static Predicate combinePredicatesWithAndOperator(CriteriaBuilder builder,

@@ -10,6 +10,7 @@ public class SearchSchema {
     private Map<String, Date> dateValues = new HashMap<>();
     private Map<String, Date> dateGreaterThan = new HashMap<>();
     private Map<String, Date> dateLessThan = new HashMap<>();
+    private Map<String, BetweenSchema<Date>> dateBetween = new HashMap<>();
     private Map<String, SearchSchema> joinValues = new HashMap<>();
 
     public Map<String, String> getStringValues() {
@@ -58,6 +59,14 @@ public class SearchSchema {
 
     public void setSubStringValues(Map<String, String> subStringValues) {
         this.subStringValues = subStringValues;
+    }
+
+    public Map<String, BetweenSchema<Date>> getDateBetween() {
+        return dateBetween;
+    }
+
+    public void setDateBetween(Map<String, BetweenSchema<Date>> dateBetween) {
+        this.dateBetween = dateBetween;
     }
 
 }

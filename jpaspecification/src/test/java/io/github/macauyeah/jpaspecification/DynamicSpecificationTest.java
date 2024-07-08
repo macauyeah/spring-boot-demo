@@ -2,6 +2,7 @@ package io.github.macauyeah.jpaspecification;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +58,29 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         cal.set(Calendar.DAY_OF_YEAR, 180);
         courseSchema.setStringValues(Map.of("uuid", "course-101"));
         courseSchema.setDateGreaterThan(Map.of("createdDate", cal.getTime()));
+        // createdDate >= middle of 2023
         assert 1L == studentRepo.count(
+                DynamicSpecification.search(Student.class, studentSchema));
+
+        BetweenSchema<Date> dateBetween = new BetweenSchema<>();
+        dateBetween.setLowerBound(cal.getTime());
+        dateBetween.setUpperBound(new Date());
+        courseSchema.setDateBetween(Map.of("createdDate", dateBetween));
+        // createdDate between middle of 2023 and now
+        // also include previous createdDate >= middle of 2023
+        assert 1L == studentRepo.count(
+                DynamicSpecification.search(Student.class, studentSchema));
+
+        cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2024);
+        cal.set(Calendar.DAY_OF_YEAR, 2);
+        dateBetween.setLowerBound(cal.getTime());
+        dateBetween.setUpperBound(new Date());
+        courseSchema.setDateBetween(Map.of("createdDate", dateBetween));
+        // createdDate between 2024-01-02 and now
+        // also include previous createdDate >= middle of 2023
+
+        assert 0L == studentRepo.count(
                 DynamicSpecification.search(Student.class, studentSchema));
     }
 
