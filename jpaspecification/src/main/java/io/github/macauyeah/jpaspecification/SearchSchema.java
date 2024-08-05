@@ -1,7 +1,9 @@
 package io.github.macauyeah.jpaspecification;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SearchSchema {
@@ -12,6 +14,13 @@ public class SearchSchema {
     private Map<String, Date> dateLessThan = new HashMap<>();
     private Map<String, BetweenSchema<Date>> dateBetween = new HashMap<>();
     private Map<String, SearchSchema> joinValues = new HashMap<>();
+
+    public void addStringValuesByReflection(List<String> names, Object instance) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
+        for (String name : names) {
+            Field field = instance.getClass().getDeclaredField(name);
+            this.stringValues.put(name, (String) field.get(instance));
+        }
+    }
 
     public Map<String, String> getStringValues() {
         return stringValues;
