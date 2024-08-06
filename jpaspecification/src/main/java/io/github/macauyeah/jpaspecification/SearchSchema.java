@@ -18,6 +18,7 @@ public class SearchSchema {
     public void addStringValuesByReflection(List<String> names, Object instance) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
         for (String name : names) {
             Field field = instance.getClass().getDeclaredField(name);
+            field.setAccessible(true);
             this.stringValues.put(name, (String) field.get(instance));
         }
     }
