@@ -3,7 +3,7 @@ package io.github.macauyeah.springboot.tutorial.spring_boot_data_advance.entity;
 import java.util.Date;
 import java.util.UUID;
 
-import io.micrometer.common.util.StringUtils;
+import org.springframework.util.StringUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
@@ -26,7 +26,7 @@ public class Book {
 
     @PrePersist
     void genUuid(){
-        if (StringUtils.isEmpty(this.getUuid())){
+        if (!StringUtils.hasLength(this.getUuid())){
             Date now = new Date();
             this.setUuid(now.getTime() + UUID.randomUUID().toString());
         }
