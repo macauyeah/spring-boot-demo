@@ -26,21 +26,21 @@ public class SearchSchemaTest {
         StudentFilter studentFilter = new StudentFilter();
         studentFilter.setName("Chan Dia Man");
         searchSchema.addStringValuesByReflection(List.of("name"), studentFilter);
-        long studentCount = studentRepo.count(DynamicSpecification.search(Student.class, searchSchema));
+        long studentCount = studentRepo.count(DynamicSpecification.searchWithAnd(Student.class, searchSchema));
         assertEquals(1L, studentCount);
 
         studentFilter = new StudentFilter();
         studentFilter.setName("Chan Dia Man");
         studentFilter.setUuid("10000");
         searchSchema.addStringValuesByReflection(List.of("name", "uuid"), studentFilter);
-        studentCount = studentRepo.count(DynamicSpecification.search(Student.class, searchSchema));
+        studentCount = studentRepo.count(DynamicSpecification.searchWithAnd(Student.class, searchSchema));
         assertEquals(1L, studentCount);
 
         studentFilter = new StudentFilter();
         studentFilter.setName("Chan Dia");
         studentFilter.setUuid("10000");
         searchSchema.addStringValuesByReflection(List.of("name", "uuid"), studentFilter);
-        studentCount = studentRepo.count(DynamicSpecification.search(Student.class, searchSchema));
+        studentCount = studentRepo.count(DynamicSpecification.searchWithAnd(Student.class, searchSchema));
         assertEquals(0L, studentCount);
     }
 

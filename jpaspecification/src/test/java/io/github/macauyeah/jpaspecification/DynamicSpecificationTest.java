@@ -1,5 +1,7 @@
 package io.github.macauyeah.jpaspecification;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -27,19 +29,19 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
     private CourseRepo courseRepo;
 
     @Test
-    void testSearch() {
+    void testSearchAnd() {
         SearchSchema studentSchema = new SearchSchema();
         studentSchema.setStringValues(Map.of("uuid", "10000"));
         studentSchema.setDateLessThan(Map.of("birthDate", new Date()));
         studentSchema.setSubStringValues(Map.of("name", "NOTEXISIT"));
         assert 0L == studentRepo.count(
-                DynamicSpecification.search(Student.class, studentSchema));
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema));
 
         studentSchema.setStringValues(Map.of("uuid", "10000"));
         studentSchema.setDateLessThan(Map.of("birthDate", new Date()));
         studentSchema.setSubStringValues(Map.of("name", "Dia"));
         assert 1L == studentRepo.count(
-                DynamicSpecification.search(Student.class, studentSchema));
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema));
 
         SearchSchema courseSchema = new SearchSchema();
         courseSchema.setStringValues(Map.of("uuid", "course-100"));
@@ -50,7 +52,7 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         studentAppSchema.setJoinValues(Map.of("course", courseSchema));
 
         assert 0L == studentRepo.count(
-                DynamicSpecification.search(Student.class, studentSchema));
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema));
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2023);
@@ -59,7 +61,7 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         courseSchema.setDateGreaterThan(Map.of("createdDate", cal.getTime()));
         // createdDate >= middle of 2023
         assert 1L == studentRepo.count(
-                DynamicSpecification.search(Student.class, studentSchema));
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema));
 
         BetweenSchema<Date> dateBetween = new BetweenSchema<>();
         dateBetween.setLowerBound(cal.getTime());
@@ -68,7 +70,7 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         // createdDate between middle of 2023 and now
         // also include previous createdDate >= middle of 2023
         assert 1L == studentRepo.count(
-                DynamicSpecification.search(Student.class, studentSchema));
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema));
 
         cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2024);
@@ -80,7 +82,36 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         // also include previous createdDate >= middle of 2023
 
         assert 0L == studentRepo.count(
-                DynamicSpecification.search(Student.class, studentSchema));
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema));
+    }
+
+    @Test
+    void testSearchOr() {
+        // search student only, two field with one field correct;
+        SearchSchema studentSchema = new SearchSchema();
+        studentSchema.setStringValues(Map.of("uuid", "10000"));
+        studentSchema.setSubStringValues(Map.of("name", "NOTEXISIT"));
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithOr(Student.class, studentSchema)));
+
+        // search with join, join field all correct;
+        studentSchema.setStringValues(Map.of());
+        studentSchema.setSubStringValues(Map.of());
+        SearchSchema courseSchema = new SearchSchema();
+        courseSchema.setStringValues(Map.of("uuid", "course-101"));
+        SearchSchema studentAppSchema = new SearchSchema();
+        studentSchema.setJoinValues(Map.of("studentApplications", studentAppSchema));
+        studentAppSchema.setJoinValues(Map.of("course", courseSchema));
+
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithOr(Student.class, studentSchema)));
+
+        // search with join, all wrong
+        studentSchema.setStringValues(Map.of("uuid", "20000"));
+        studentSchema.setSubStringValues(Map.of("name", "NOTEXISIT"));
+        courseSchema.setStringValues(Map.of("uuid", "course-200"));
+        assertEquals(0L, studentRepo.count(
+                DynamicSpecification.searchWithOr(Student.class, studentSchema)));
     }
 
     @BeforeEach

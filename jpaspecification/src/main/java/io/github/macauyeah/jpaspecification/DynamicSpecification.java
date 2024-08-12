@@ -13,17 +13,32 @@ import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 
 public class DynamicSpecification {
-    public static <E> Specification<E> search(Class<E> entityClass, SearchSchema searchSchema) {
+    private static final String combineByAnd = "combineByAnd";
+    private static final String combineByOr = "combineByOr";
+
+    public static <E> Specification<E> searchWithAnd(Class<E> entityClass, SearchSchema searchSchema) {
         return (root, query, builder) -> {
-            query.distinct(true);
-            return searchJoin(root, builder, searchSchema);
+            if (query != null) {
+                query.distinct(true);
+            }
+            return searchJoin(root, builder, searchSchema, combineByAnd);
+        };
+    }
+
+    public static <E> Specification<E> searchWithOr(Class<E> entityClass, SearchSchema searchSchema) {
+        return (root, query, builder) -> {
+            if (query != null) {
+                query.distinct(true);
+            }
+            return searchJoin(root, builder, searchSchema, combineByOr);
         };
     }
 
     private static Predicate searchJoin(
             From<?, ?> joinObject,
             CriteriaBuilder builder,
-            SearchSchema searchSchema) {
+            SearchSchema searchSchema,
+            String combineMode) {
         List<Predicate> predicates = new ArrayList<>();
         predicates.addAll(
                 searchPath(joinObject, builder, searchSchema));
@@ -31,10 +46,17 @@ public class DynamicSpecification {
         List<Predicate> joinPredicates = searchSchema.getJoinValues().entrySet().stream().map(
                 (mapEntry) -> {
                     Join<Object, Object> joinResult = joinObject.join(mapEntry.getKey());
-                    return searchJoin(joinResult, builder, mapEntry.getValue());
+                    return searchJoin(joinResult, builder, mapEntry.getValue(), combineMode);
                 }).collect(Collectors.toList());
         predicates.addAll(joinPredicates);
-        return combinePredicatesWithAndOperator(builder, predicates);
+
+        if (combineByAnd.equals(combineMode)) {
+            return combinePredicatesWithAndOperator(builder, predicates);
+        } else if (combineByOr.equals(combineMode)) {
+            return combinePredicatesWithOrOperator(builder, predicates);
+        } else {
+            return null;
+        }
     }
 
     private static List<Predicate> searchPath(
@@ -148,5 +170,10 @@ public class DynamicSpecification {
     private static Predicate combinePredicatesWithAndOperator(CriteriaBuilder builder,
             List<Predicate> predicates) {
         return builder.and(predicates.toArray(new Predicate[0]));
+    }
+
+    private static Predicate combinePredicatesWithOrOperator(CriteriaBuilder builder,
+            List<Predicate> predicates) {
+        return builder.or(predicates.toArray(new Predicate[0]));
     }
 }
