@@ -14,8 +14,11 @@ public class SearchSchema {
     private Map<String, Date> dateLessThan = new HashMap<>();
     private Map<String, BetweenSchema<Date>> dateBetween = new HashMap<>();
     private Map<String, SearchSchema> joinValues = new HashMap<>();
+    private Map<String, Integer> integerValues = new HashMap<>();
+    private Map<String, Double> doubleValues = new HashMap<>();
 
-    public void addStringValuesByReflection(List<String> names, Object instance) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
+    public void addStringValuesByReflection(List<String> names, Object instance)
+            throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         for (String name : names) {
             Field field = instance.getClass().getDeclaredField(name);
             field.setAccessible(true);
@@ -79,4 +82,21 @@ public class SearchSchema {
         this.dateBetween = dateBetween;
     }
 
+    public Map<String, Integer> getIntegerValues() {
+        return integerValues;
+    }
+
+    public void setIntegerValues(Map<String, Integer> integerValues) {
+        this.integerValues = integerValues;
+    }
+
+    public Map<String, Double> getDoubleValues() {
+        return doubleValues;
+    }
+
+    public void setDoubleValues(Map<String, Double> doubleValues) {
+        this.doubleValues = doubleValues;
+    }
+
+    
 }

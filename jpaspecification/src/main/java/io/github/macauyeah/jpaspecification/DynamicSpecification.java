@@ -75,6 +75,35 @@ public class DynamicSpecification {
                         searchSchema,
                         path,
                         builder));
+
+        predicates.addAll(
+                getNumbericPredicates(
+                        searchSchema,
+                        path,
+                        builder));
+        return predicates;
+    }
+
+    private static List<Predicate> getNumbericPredicates(
+            SearchSchema searchSchema,
+            Path<?> path,
+            CriteriaBuilder builder) {
+        List<Predicate> predicates = searchSchema.getIntegerValues().entrySet().stream().map(
+                (mapEntry) -> {
+                    return generateEqualPredicate(
+                            path,
+                            builder,
+                            mapEntry.getKey(),
+                            mapEntry.getValue());
+                }).collect(Collectors.toList());
+        predicates.addAll(searchSchema.getDoubleValues().entrySet().stream().map(
+                (mapEntry) -> {
+                    return generateEqualPredicate(
+                            path,
+                            builder,
+                            mapEntry.getKey(),
+                            mapEntry.getValue());
+                }).collect(Collectors.toList()));
         return predicates;
     }
 

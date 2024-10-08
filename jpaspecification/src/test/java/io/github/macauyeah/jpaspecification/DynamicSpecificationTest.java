@@ -59,9 +59,11 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         cal.set(Calendar.DAY_OF_YEAR, 180);
         courseSchema.setStringValues(Map.of("uuid", "course-101"));
         courseSchema.setDateGreaterThan(Map.of("createdDate", cal.getTime()));
+        courseSchema.setDoubleValues(Map.of("learningHours", 3.5));
+        courseSchema.setIntegerValues(Map.of("credit", 5));
         // createdDate >= middle of 2023
-        assert 1L == studentRepo.count(
-                DynamicSpecification.searchWithAnd(Student.class, studentSchema));
+        Long count = studentRepo.count(DynamicSpecification.searchWithAnd(Student.class, studentSchema));
+        assertEquals(1, count);
 
         BetweenSchema<Date> dateBetween = new BetweenSchema<>();
         dateBetween.setLowerBound(cal.getTime());
@@ -112,6 +114,14 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         courseSchema.setStringValues(Map.of("uuid", "course-200"));
         assertEquals(0L, studentRepo.count(
                 DynamicSpecification.searchWithOr(Student.class, studentSchema)));
+
+        // search with join, one correct
+        studentSchema.setStringValues(Map.of("uuid", "20000"));
+        studentSchema.setSubStringValues(Map.of("name", "NOTEXISIT"));
+        courseSchema.setStringValues(Map.of("uuid", "course-200"));
+        courseSchema.setIntegerValues(Map.of("credit", 5));
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithOr(Student.class, studentSchema)));
     }
 
     @BeforeEach
@@ -127,6 +137,8 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
 
         Course course = new Course();
         course.setUuid("course-101");
+        course.setCredit(5);
+        course.setLearningHours(3.5);
         cal.set(Calendar.YEAR, 2024);
         course.setCreatedDate(cal.getTime());
         courseRepo.save(course);

@@ -13,6 +13,16 @@ public class Course {
     @Id
     private String uuid;
     private Date createdDate;
+    private Integer credit;
+    private Double learningHours;
+
+    public Double getLearningHours() {
+        return learningHours;
+    }
+
+    public void setLearningHours(Double learningHours) {
+        this.learningHours = learningHours;
+    }
 
     public Date getCreatedDate() {
         return createdDate;
@@ -39,6 +49,14 @@ public class Course {
 
     public void setStudentApplications(List<StudentApplication> studentApplications) {
         this.studentApplications = studentApplications;
+    }
+
+    public Integer getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Integer credit) {
+        this.credit = credit;
     }
 
 }
