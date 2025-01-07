@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.github.macauyeah.springboot.tutorial</groupId>
-	<artifactId>sprint-boot-rest-template-test</artifactId>
+	<artifactId>spring-boot-rest-template-test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>sprint-boot-rest-template-test</name>
+	<name>spring-boot-rest-template-test</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
