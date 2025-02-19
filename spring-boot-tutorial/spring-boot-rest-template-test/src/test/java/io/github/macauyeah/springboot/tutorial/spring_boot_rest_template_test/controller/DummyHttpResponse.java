@@ -22,43 +22,36 @@ public class DummyHttpResponse implements HttpResponse<String> {
 
     @Override
     public HttpHeaders headers() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'headers'");
     }
 
     @Override
     public Optional<HttpResponse<String>> previousResponse() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'previousResponse'");
     }
 
     @Override
     public HttpRequest request() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'request'");
     }
 
     @Override
     public Optional<SSLSession> sslSession() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'sslSession'");
     }
 
     @Override
     public int statusCode() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'statusCode'");
     }
 
     @Override
     public URI uri() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'uri'");
     }
 
     @Override
     public Version version() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'version'");
     }
     
