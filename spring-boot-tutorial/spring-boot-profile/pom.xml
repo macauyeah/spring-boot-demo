@@ -69,6 +69,12 @@
 				</property>
 			</activation>
 		</profile>
+		<profile>
+			<id>mix</id>
+			<properties>
+				<active.profile>uat,dev</active.profile>
+			</properties>
+		</profile>
 	</profiles>
 
 	<build>

@@ -21,7 +21,7 @@ public class AppRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        LOG.info("spring.profiles.active: {}", springProfilesActive);
+        LOG.info("in AppRunner, spring.profiles.active:{}", springProfilesActive);
         LOG.info("application.custom.overwrite-by-dev:{}", overwriteByDev);
         LOG.info("application.custom.overwrite-by-uat:{}", overwriteByUat);
         LOG.info("application.custom.url:{}", url);
