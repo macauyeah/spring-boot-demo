@@ -16,6 +16,7 @@ public class SearchSchema {
     private Map<String, SearchSchema> joinValues = new HashMap<>();
     private Map<String, Integer> integerValues = new HashMap<>();
     private Map<String, Double> doubleValues = new HashMap<>();
+    private Map<String, BetweenSchema<Double>> doubleBetween = new HashMap<>();
 
     public void addStringValuesByReflection(List<String> names, Object instance)
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -98,5 +99,11 @@ public class SearchSchema {
         this.doubleValues = doubleValues;
     }
 
-    
+    public Map<String, BetweenSchema<Double>> getDoubleBetween() {
+        return doubleBetween;
+    }
+
+    public void setDoubleBetween(Map<String, BetweenSchema<Double>> doubleBetween) {
+        this.doubleBetween = doubleBetween;
+    }
 }

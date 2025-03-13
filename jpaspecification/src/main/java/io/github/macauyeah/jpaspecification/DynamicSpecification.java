@@ -2,6 +2,7 @@ package io.github.macauyeah.jpaspecification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -104,7 +105,24 @@ public class DynamicSpecification {
                             mapEntry.getKey(),
                             mapEntry.getValue());
                 }).collect(Collectors.toList()));
+        List<Predicate> betweenPredicate = generateBetweenPredicateList(path, builder, searchSchema.getDoubleBetween());
+        predicates.addAll(betweenPredicate);
         return predicates;
+    }
+
+    private static <X extends Comparable<X>> List<Predicate> generateBetweenPredicateList(
+            Path<?> path,
+            CriteriaBuilder cb,
+            Map<String, BetweenSchema<X>> mapOfBetweenSchema) {
+        return mapOfBetweenSchema.entrySet().stream().map(
+                (betweenSchema) -> {
+                    return generateBetweenPredicate(
+                            path,
+                            cb,
+                            betweenSchema.getKey(), // fieldName
+                            betweenSchema.getValue().getLowerBound(), // fieldValue between
+                            betweenSchema.getValue().getUpperBound());
+                }).collect(Collectors.toList());
     }
 
     private static List<Predicate> getStringPredicates(
@@ -164,15 +182,8 @@ public class DynamicSpecification {
                             mapEntry.getKey(),
                             mapEntry.getValue());
                 }).collect(Collectors.toList()));
-        predicates.addAll(searchSchema.getDateBetween().entrySet().stream().map(
-                (mapEntry) -> {
-                    return generateBetweenPredicate(
-                            path,
-                            builder,
-                            mapEntry.getKey(),
-                            mapEntry.getValue().getLowerBound(),
-                            mapEntry.getValue().getUpperBound());
-                }).collect(Collectors.toList()));
+        List<Predicate> betweenPredicate = generateBetweenPredicateList(path, builder, searchSchema.getDateBetween());
+        predicates.addAll(betweenPredicate);
         return predicates;
     }
 

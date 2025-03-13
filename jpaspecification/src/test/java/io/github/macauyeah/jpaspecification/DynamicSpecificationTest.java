@@ -124,6 +124,11 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
                 DynamicSpecification.searchWithOr(Student.class, studentSchema)));
     }
 
+    @Test
+    void testBetweenDouble() {
+        throw new RuntimeException("not yet implement");
+    }
+
     @BeforeEach
     void initStaffRepo() {
         Student student = new Student();
