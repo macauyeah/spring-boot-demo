@@ -31,6 +31,8 @@ public class BasicApplicationRunner implements ApplicationRunner {
 		appleRepo.save(apple2);
 
 		dump();
+		long count = appleRepo.count();
+		assert count == 2;
 	}
 
 	private void dump() {
