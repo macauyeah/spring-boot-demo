@@ -29,7 +29,7 @@ class DeletionApplicationTests {
 	void deleteCascadeWithoutRefreshWillFail() {
 		assertEquals(1, authorRepo.count());
 		assertEquals(1, bookRepo.count());
-		assertThrows(org.springframework.dao.DataIntegrityViolationException.class,()->{
+		assertThrows(org.springframework.dao.InvalidDataAccessApiUsageException.class,()->{
 			authorRepo.delete(targetAuthor);
 		});
 		// need to manually delete child then parent;
