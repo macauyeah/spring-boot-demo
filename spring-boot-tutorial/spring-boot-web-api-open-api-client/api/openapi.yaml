@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:9000/proxy/8080/
+paths:
+  /api/record:
+    post:
+      operationId: postDateQuery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiDateRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                type: string
+          description: OK
+      tags:
+      - api-controller
+      x-content-type: application/json
+      x-accepts:
+      - '*/*'
+  /api/record/{uuid}:
+    get:
+      operationId: getRecords
+      parameters:
+      - explode: false
+        in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: filter
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                type: string
+          description: OK
+      tags:
+      - api-controller
+      x-accepts:
+      - '*/*'
+  /api/postfix:
+    get:
+      operationId: postfix
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                type: string
+          description: OK
+      tags:
+      - child-controller
+      x-accepts:
+      - '*/*'
+  /api/direct:
+    get:
+      operationId: directCall
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                type: string
+          description: OK
+      tags:
+      - child-controller
+      x-accepts:
+      - '*/*'
+components:
+  schemas:
+    ApiDateRequest:
+      example:
+        inputDate: 2000-01-23T04:56:07.000+00:00
+      properties:
+        inputDate:
+          format: date-time
+          type: string
+

@@ -11,7 +11,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class OpenApiConfig {
     @Bean
-    public OpenAPI customOpenAPI() {
+    OpenAPI customOpenAPI() {
         Server server = new Server();
         server.setUrl("http://localhost:9000/proxy/8080/");
         // and paste http://localhost:9000/proxy/8080/v3/api-docs to the swagger-ui "explore" 
