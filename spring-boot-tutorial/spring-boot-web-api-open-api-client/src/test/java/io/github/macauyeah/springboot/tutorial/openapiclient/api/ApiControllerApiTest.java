@@ -42,16 +42,15 @@ public class ApiControllerApiTest {
 
     private final ApiControllerApi api = new ApiControllerApi();
 
-    /**
-     * 
-     *
-     * 
-     */
     @Test
     public void postDateQueryTest() {
+        // default call
         ApiDateRequest apiDateRequest = new ApiDateRequest();
         apiDateRequest.setInputDate(OffsetDateTime.now());
+        LOG.debug("default web client postDateQuery:{}", api.postDateQuery(apiDateRequest).block());
 
+        // replace webClient in ApiClient if you have special auth config on
+        // webClient, you can also change basePath during new obj creation
         ObjectMapper mapper = new ObjectMapper();
         mapper.setDateFormat(new SimpleDateFormat());
         mapper.registerModule(new JavaTimeModule());
@@ -62,13 +61,15 @@ public class ApiControllerApiTest {
                 })
                 .build();
 
-        ApiControllerApi api2 = new ApiControllerApi(new ApiClient(webClient));
-        LOG.debug("default web client postDateQuery:{}", api.postDateQuery(apiDateRequest).block());
+        ApiControllerApi api2 = new ApiControllerApi(
+                new ApiClient(webClient)
+                        .setBasePath("http://localhost:8080/"));
         LOG.debug("create api2 by local web client postDateQuery:{}", api2.postDateQuery(apiDateRequest).block());
 
+        // use webClient directly
         String response = webClient.post().uri("http://localhost:8080/api/record").bodyValue(apiDateRequest).retrieve()
                 .bodyToMono(String.class).block();
-        LOG.debug("by local web client postDateQuery:{}", response);
+        LOG.debug("request by local web client postDateQuery:{}", response);
     }
 
     private static Logger LOG = LoggerFactory.getLogger(ApiControllerApiTest.class);

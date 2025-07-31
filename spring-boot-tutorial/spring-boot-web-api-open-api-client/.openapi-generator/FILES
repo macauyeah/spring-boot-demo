@@ -1,6 +1,5 @@
 .github/workflows/maven.yml
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -33,6 +32,3 @@ src/main/java/io/github/macauyeah/springboot/tutorial/openapiclient/invoker/auth
 src/main/java/io/github/macauyeah/springboot/tutorial/openapiclient/invoker/auth/HttpBasicAuth.java
 src/main/java/io/github/macauyeah/springboot/tutorial/openapiclient/invoker/auth/HttpBearerAuth.java
 src/main/java/io/github/macauyeah/springboot/tutorial/openapiclient/model/ApiDateRequest.java
-src/test/java/io/github/macauyeah/springboot/tutorial/openapiclient/api/ApiControllerApiTest.java
-src/test/java/io/github/macauyeah/springboot/tutorial/openapiclient/api/ChildControllerApiTest.java
-src/test/java/io/github/macauyeah/springboot/tutorial/openapiclient/model/ApiDateRequestTest.java

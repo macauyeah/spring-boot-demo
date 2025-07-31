@@ -4,7 +4,7 @@ OpenAPI definition
 
 - API version: v0
 
-- Build date: 2025-06-03T15:44:01.488474300+08:00[Asia/Macau]
+- Build date: 2025-07-31T15:39:32.089483629+08:00[Asia/Macau]
 
 - Generator version: 7.13.0
 
