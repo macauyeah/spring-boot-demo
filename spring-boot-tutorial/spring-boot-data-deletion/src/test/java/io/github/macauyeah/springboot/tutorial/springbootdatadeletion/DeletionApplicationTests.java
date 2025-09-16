@@ -1,4 +1,4 @@
-package io.github.macauyeah.springboot.tutorial.deletion;
+package io.github.macauyeah.springboot.tutorial.springbootdatadeletion;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import io.github.macauyeah.springboot.tutorial.deletion.entity.Author;
-import io.github.macauyeah.springboot.tutorial.deletion.entity.Book;
-import io.github.macauyeah.springboot.tutorial.deletion.repo.AuthorRepo;
-import io.github.macauyeah.springboot.tutorial.deletion.repo.BookRepo;
+import io.github.macauyeah.springboot.tutorial.springbootdatadeletion.entity.Author;
+import io.github.macauyeah.springboot.tutorial.springbootdatadeletion.entity.Book;
+import io.github.macauyeah.springboot.tutorial.springbootdatadeletion.repo.AuthorRepo;
+import io.github.macauyeah.springboot.tutorial.springbootdatadeletion.repo.BookRepo;
 
 @SpringBootTest
 class DeletionApplicationTests {

@@ -1,4 +1,4 @@
-package io.github.macauyeah.springboot.tutorial.deletion.entity;
+package io.github.macauyeah.springboot.tutorial.springbootdatadeletion.entity;
 
 import java.util.ArrayList;
 import java.util.List;

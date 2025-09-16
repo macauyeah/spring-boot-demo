@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.github.macauyeah.springboot.tutorial</groupId>
-	<artifactId>deletion</artifactId>
+	<artifactId>spring-boot-data-deletion</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>deletion</name>
+	<name>spring-boot-data-deletion</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
