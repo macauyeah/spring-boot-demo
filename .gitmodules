@@ -1,0 +1,4 @@
+[submodule "spring-boot-multiple-datasource"]
+	path = spring-boot-multiple-datasource
+	url = https://github.com/macauyeah/spring-boot-multiple-datasource.git
+	branch = feature/devcontainer

@@ -29,12 +29,14 @@ class DeletionApplicationTests {
 	void deleteCascadeWithoutRefreshWillFail() {
 		assertEquals(1, authorRepo.count());
 		assertEquals(1, bookRepo.count());
-		assertThrows(org.springframework.dao.InvalidDataAccessApiUsageException.class,()->{
+		// apply (CascadeType.REMOVE) or (orphanRemoval = true) will have same behavior
+		assertThrows(org.springframework.dao.InvalidDataAccessApiUsageException.class, () -> {
 			authorRepo.delete(targetAuthor);
 		});
-		// need to manually delete child then parent;
-		bookRepo.delete(targetBook);
+		assertEquals(1, authorRepo.count());
+		targetAuthor.addBook(targetBook);
 		authorRepo.delete(targetAuthor);
+		assertEquals(0, authorRepo.count());
 	}
 
 	@Test
@@ -48,7 +50,7 @@ class DeletionApplicationTests {
 	}
 
 	@BeforeEach
-	private void prepare(){
+	private void prepare() {
 		Author author = new Author();
 		author.setName("test name");
 		authorRepo.save(author);
@@ -64,7 +66,7 @@ class DeletionApplicationTests {
 	}
 
 	@AfterEach
-	private void checkCount(){
+	private void checkCount() {
 		assertEquals(0, bookRepo.count());
 	}
 

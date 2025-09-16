@@ -38,4 +38,13 @@ public class Author {
         this.uuid = uuid;
     }
 
+    public void addBook(Book book){
+        this.books.add(book);
+        book.setAuthor(this);
+    }
+
+    public void removeBook(Book book){
+        this.books.remove(book);
+        book.setAuthor(null);
+    }
 }

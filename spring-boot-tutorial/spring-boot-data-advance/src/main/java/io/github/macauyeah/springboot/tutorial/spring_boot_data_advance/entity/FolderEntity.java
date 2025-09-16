@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +17,7 @@ public class FolderEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private String remark;
-    @OneToMany(mappedBy = "folder")
+    @OneToMany(mappedBy = "folder", fetch = FetchType.EAGER)
     private List<FileEntity> files = new ArrayList<>();
 
     public String getRemark() {

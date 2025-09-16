@@ -1,7 +1,6 @@
 package io.github.macauyeah.springboot.tutorial.spring_boot_data_advance;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.UUID;
 
@@ -31,31 +30,7 @@ public class OneToManyRefreshStatusTests {
 
     @Test
     @Transactional
-    void simpleCreate() {
-        FolderEntity folder = new FolderEntity();
-        folderRepo.saveAndFlush(folder); // same as save()
-        assertEquals(0, folder.getFiles().size());
-
-        FileEntity file = new FileEntity();
-        file.setFolder(folder);
-        fileRepo.saveAndFlush(file); // same as save()
-        assertNotNull(file.getFolder());
-        assertEquals(0, folder.getFiles().size());
-
-        FolderEntity folderById = folderRepo.findById(folder.getUuid()).orElseThrow();
-        assertEquals(0, folderById.getFiles().size()); // why no update
-        assertEquals(0, folder.getFiles().size());
-
-        folder.addFile(file);
-        fileRepo.save(file);
-        folderById = folderRepo.findById(folder.getUuid()).orElseThrow();
-        assertEquals(1, folderById.getFiles().size()); // even no saving event on folder object, folderById still
-                                                       // updated
-        assertEquals(1, folder.getFiles().size());
-    }
-
-    @Transactional
-    private UUID createAndEndTrasaction() {
+    void withTransaction() {
         FolderEntity folder = new FolderEntity();
         folderRepo.saveAndFlush(folder);
         assertEquals(0, folder.getFiles().size());
@@ -63,14 +38,29 @@ public class OneToManyRefreshStatusTests {
         FileEntity file = new FileEntity();
         file.setFolder(folder);
         fileRepo.saveAndFlush(file);
-        return folder.getUuid();
+
+        UUID folderUuid = folder.getUuid();
+        FolderEntity folderById;
+        folderById = folderRepo.findById(folderUuid).orElseThrow();
+        assertEquals(0, folderById.getFiles().size()); // hibernate not query database again, using existing folder value
+        
+        folder.addFile(file);
+        folderById = folderRepo.findById(folderUuid).orElseThrow();
+        assertEquals(1, folderById.getFiles().size()); // hibernate not query database again, using existing folder value
     }
 
     @Test
-    @Transactional
-    void createInTransactionAndReadInOtherTransaction() {
-        UUID folderUuid = this.createAndEndTrasaction();
+    void withoutTransaction() {
+        FolderEntity folder = new FolderEntity();
+        folderRepo.saveAndFlush(folder);
+        assertEquals(0, folder.getFiles().size());
+
+        FileEntity file = new FileEntity();
+        file.setFolder(folder);
+        fileRepo.saveAndFlush(file);
+
+        UUID folderUuid = folder.getUuid();
         FolderEntity folderById = folderRepo.findById(folderUuid).orElseThrow();
-        assertEquals(0, folderById.getFiles().size()); // why no update, same transaction?
+        assertEquals(1, folderById.getFiles().size()); // without transaction, hibernate directly query database again
     }
 }
