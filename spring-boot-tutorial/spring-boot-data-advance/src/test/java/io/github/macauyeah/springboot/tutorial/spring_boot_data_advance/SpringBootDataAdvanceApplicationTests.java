@@ -71,13 +71,18 @@ class SpringBootDataAdvanceApplicationTests {
 	}
 
 	@Test
-	void TestLongListByJoinFail() {
+	void TestLongListByJoin() {
 		List<Book> books = new ArrayList<>();
 		for (int i = 0; i < 1000000; i++) {
 			Book book = new Book();
 			books.add(book);
 		}
 		bookRepo.saveAll(books);
+
+		// want to search book by long list of uuid, but it is too large
+		// so put them into other table, apply batch num and join method
+		// too query the original book by join result
+		// BookSearchJoin should include all column of Book.
 		String batchNum = UUID.randomUUID().toString();
 		List<BookSearch> bookSearchList = books.stream().map(book->{
 			BookSearch bookSearch = new BookSearch();

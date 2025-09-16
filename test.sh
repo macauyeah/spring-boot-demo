@@ -14,7 +14,7 @@ done
 
 cd "spring-boot-tutorial"
 declare -a arr2=("commandline"
-   # "spring-boot-data-advance"
+   "spring-boot-data-advance"
    "spring-boot-data-basic"
    "spring-boot-data-deletion"
    "spring-boot-data-test"
