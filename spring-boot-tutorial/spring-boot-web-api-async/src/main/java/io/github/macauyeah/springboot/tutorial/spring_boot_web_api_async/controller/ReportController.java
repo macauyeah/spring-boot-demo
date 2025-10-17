@@ -50,15 +50,16 @@ public class ReportController {
                 .accepted()
                 .header(HttpHeaders.LOCATION, "/reportJob/status/" + uuid)
                 .body(Map.of("uuid", uuid, "status api",
-                        "/reportJob/status/" + uuid, "download api",
+                        "/api/reportJob/status/" + uuid, "download api",
                         "/api/reportJob/download/" + uuid));
     }
 
     @GetMapping("/reportJob/status/{uuid}")
     public ResponseEntity<Object> getStatus(@PathVariable("uuid") String uuid) {
         String status = orderStatus.get(uuid);
-        if (status == null)
+        if (status == null) {
             return ResponseEntity.notFound().build();
+        }
 
         if (COMPLETED.equals(status)) {
             // return ResponseEntity.status(HttpStatus.SEE_OTHER)
@@ -71,9 +72,10 @@ public class ReportController {
                 .body(Map.of("status", PROCESSING));
     }
 
-    @GetMapping("reportJob/download/{uuid}")
+    @GetMapping("/reportJob/download/{uuid}")
     public ResponseEntity<Resource> download(@PathVariable("uuid") String uuid) {
-        if (!orderStatus.containsKey(uuid)) {
+        String status = orderStatus.get(uuid);
+        if (status == null || !COMPLETED.equals(status)) {
             return ResponseEntity.notFound().build();
         }
 
@@ -86,7 +88,7 @@ public class ReportController {
                     .contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 
