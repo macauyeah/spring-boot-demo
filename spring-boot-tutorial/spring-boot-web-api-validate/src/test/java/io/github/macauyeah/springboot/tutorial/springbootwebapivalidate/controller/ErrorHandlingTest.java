@@ -1,10 +1,13 @@
 package io.github.macauyeah.springboot.tutorial.springbootwebapivalidate.controller;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -20,10 +23,27 @@ public class ErrorHandlingTest {
     @Test
     void testHtmlResourceNotFound() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/assets/notexists.js");
-                // .contentType(MediaType.APPLICATION_JSON)
-                // .content(request);
         this.mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void testForceError() throws Exception {
+        RequestBuilder ioRequestBuilder = MockMvcRequestBuilders.get("/api/ioError");
+        assertThrows(IOException.class, ()->{
+            this.mockMvc.perform(ioRequestBuilder)
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("force io error"));
+        });
+        
+        RequestBuilder forceErrorBuilder = MockMvcRequestBuilders.get("/api/forceError");
+        this.mockMvc.perform(forceErrorBuilder)
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("masked message"));
     }
 }
