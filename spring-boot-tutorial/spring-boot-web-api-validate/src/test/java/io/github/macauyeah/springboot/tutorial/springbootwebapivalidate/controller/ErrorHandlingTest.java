@@ -32,11 +32,8 @@ public class ErrorHandlingTest {
     void testForceError() throws Exception {
         RequestBuilder ioRequestBuilder = MockMvcRequestBuilders.get("/api/ioError");
         assertThrows(IOException.class, ()->{
-            this.mockMvc.perform(ioRequestBuilder)
-                .andExpect(MockMvcResultMatchers.status().is5xxServerError())
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(false))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.error").value("force io error"));
+            this.mockMvc.perform(ioRequestBuilder);// test case cannot get the response ???
+            // because of the unhandle exception?
         });
         
         RequestBuilder forceErrorBuilder = MockMvcRequestBuilders.get("/api/forceError");
@@ -45,5 +42,13 @@ public class ErrorHandlingTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("masked message"));
+
+
+        RequestBuilder authErrorBuilder = MockMvcRequestBuilders.get("/api/authError");
+        this.mockMvc.perform(authErrorBuilder)
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("custom auth error"));
     }
 }
