@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -20,6 +22,8 @@ class MultipleProfileDevUatTests {
     private String overwriteByDev;
     @Value("${application.custom.overwrite-by-uat}")
     private String overwriteByUat;
+    @Autowired
+    private Environment environment;
 
     private static final Logger LOG = LoggerFactory.getLogger(MultipleProfileDevUatTests.class);
 
@@ -32,6 +36,7 @@ class MultipleProfileDevUatTests {
         // assertEquals("dev", springProfilesActive);
 
         LOG.info("in MultipleProfileDevUatTests, spring.profiles.active:{}", springProfilesActive);
+        LOG.info("environment ActiveProfiles:{}", String.join(",", environment.getActiveProfiles()));
 
         // multiple profiles are applied, just like runtime argument
         // --spring.profiles.active=dev,uat
