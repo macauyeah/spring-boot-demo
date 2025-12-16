@@ -24,6 +24,7 @@ declare -a arr2=("commandline"
    "spring-boot-web-api-data"
    "spring-boot-web-api-doc"
    "spring-boot-web-api-validate"
+   "fast-excel"
    # "spring-boot-web-api-open-api-client"
 )
 for i in "${arr2[@]}"
