@@ -13,6 +13,8 @@ import io.github.macauyeah.springboot.tutorial.springbootwebapivalidate.controll
 public class GlobalExceptionHandler {
     // cannot catch the top most java.lang.Exception, because all spring boot
     // defined error will be truned into status 500
+    // TODO another problem, how to report exception that not inherit from
+    // RuntimeException, like IOException throw from controller
     @ExceptionHandler(value = RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, Object> handleException(Exception ex) {
