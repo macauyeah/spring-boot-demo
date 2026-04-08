@@ -9,6 +9,7 @@ import java.util.Map;
 public class SearchSchema {
     private Map<String, String> stringValues = new HashMap<>();
     private Map<String, String> subStringValues = new HashMap<>();
+    private Map<String, Boolean> booleanValues = new HashMap<>();
     private Map<String, Date> dateValues = new HashMap<>();
     private Map<String, Date> dateGreaterThan = new HashMap<>();
     private Map<String, Date> dateLessThan = new HashMap<>();
@@ -106,4 +107,13 @@ public class SearchSchema {
     public void setDoubleBetween(Map<String, BetweenSchema<Double>> doubleBetween) {
         this.doubleBetween = doubleBetween;
     }
+
+    public Map<String, Boolean> getBooleanValues() {
+        return booleanValues;
+    }
+
+    public void setBooleanValues(Map<String, Boolean> booleanValues) {
+        this.booleanValues = booleanValues;
+    }
+
 }

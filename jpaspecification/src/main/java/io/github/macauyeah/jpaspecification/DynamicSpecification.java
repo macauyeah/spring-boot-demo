@@ -82,6 +82,12 @@ public class DynamicSpecification {
                         searchSchema,
                         path,
                         builder));
+
+        predicates.addAll(
+                getBooleanPredicates(
+                        searchSchema,
+                        path,
+                        builder));
         return predicates;
     }
 
@@ -146,6 +152,21 @@ public class DynamicSpecification {
                             mapEntry.getKey(),
                             mapEntry.getValue());
                 }).collect(Collectors.toList()));
+        return predicates;
+    }
+
+    private static List<Predicate> getBooleanPredicates(
+            SearchSchema searchSchema,
+            Path<?> path,
+            CriteriaBuilder builder) {
+        List<Predicate> predicates = searchSchema.getBooleanValues().entrySet().stream().map(
+                (mapEntry) -> {
+                    return generateEqualPredicate(
+                            path,
+                            builder,
+                            mapEntry.getKey(),
+                            mapEntry.getValue());
+                }).collect(Collectors.toList());
         return predicates;
     }
 
