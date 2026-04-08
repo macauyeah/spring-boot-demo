@@ -129,6 +129,11 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
         throw new RuntimeException("not yet implement");
     }
 
+    @Test
+    void testIsNull(){
+        throw new RuntimeException("not yet implement");
+    }
+
     @BeforeEach
     void initStaffRepo() {
         Student student = new Student();

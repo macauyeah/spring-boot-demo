@@ -210,7 +210,11 @@ public class DynamicSpecification {
 
     private static <Y> Predicate generateEqualPredicate(
             Path<?> path, CriteriaBuilder cb, String key, Y value) {
-        return cb.equal(path.<Y>get(key), value);
+        if (value == null) {
+            return cb.isNull(path.<Y>get(key));
+        } else {
+            return cb.equal(path.<Y>get(key), value);
+        }
     }
 
     private static <Y extends Comparable<? super Y>> Predicate generateGreaterThanPredicate(
