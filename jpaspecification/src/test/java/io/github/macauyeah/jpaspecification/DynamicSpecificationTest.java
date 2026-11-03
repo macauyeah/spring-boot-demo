@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -130,8 +131,51 @@ public class DynamicSpecificationTest { // class name must ending with *Test / *
     }
 
     @Test
-    void testIsNull(){
-        throw new RuntimeException("not yet implement");
+    void testIsNull() {
+        // this student leaves name and birthDate empty
+        Student studentWithoutName = new Student();
+        studentWithoutName.setUuid("10001");
+        studentRepo.save(studentWithoutName);
+
+        SearchSchema studentSchema = new SearchSchema();
+        studentSchema.setIsNullFields(Set.of("name"));
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema)));
+
+        studentSchema.setIsNullFields(Set.of("birthDate"));
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema)));
+
+        // the student from initStaffRepo has name and birthDate filled
+        studentSchema.setIsNullFields(Set.of());
+        studentSchema.setIsNotNullFields(Set.of("name"));
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema)));
+
+        studentSchema.setIsNotNullFields(Set.of("birthDate"));
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithAnd(Student.class, studentSchema)));
+
+        // null check works on joined path too
+        Course course = new Course();
+        course.setUuid("course-102");
+        courseRepo.save(course);
+
+        StudentApplication studentApplication = new StudentApplication();
+        studentApplication.setUuid("course-102-10000");
+        studentApplication.setCourse(course);
+        studentApplication.setStudent(studentRepo.findById("10000").get());
+        studentAppRepo.save(studentApplication);
+
+        SearchSchema courseSchema = new SearchSchema();
+        courseSchema.setIsNullFields(Set.of("credit"));
+        SearchSchema studentAppSchema = new SearchSchema();
+        studentAppSchema.setJoinValues(Map.of("course", courseSchema));
+
+        SearchSchema joinStudentSchema = new SearchSchema();
+        joinStudentSchema.setJoinValues(Map.of("studentApplications", studentAppSchema));
+        assertEquals(1L, studentRepo.count(
+                DynamicSpecification.searchWithAnd(Student.class, joinStudentSchema)));
     }
 
     @BeforeEach

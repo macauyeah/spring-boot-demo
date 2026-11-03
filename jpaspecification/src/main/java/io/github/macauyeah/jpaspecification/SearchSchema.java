@@ -3,8 +3,10 @@ package io.github.macauyeah.jpaspecification;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class SearchSchema {
     private Map<String, String> stringValues = new HashMap<>();
@@ -18,6 +20,8 @@ public class SearchSchema {
     private Map<String, Integer> integerValues = new HashMap<>();
     private Map<String, Double> doubleValues = new HashMap<>();
     private Map<String, BetweenSchema<Double>> doubleBetween = new HashMap<>();
+    private Set<String> isNullFields = new HashSet<>();
+    private Set<String> isNotNullFields = new HashSet<>();
 
     public void addStringValuesByReflection(List<String> names, Object instance)
             throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -114,6 +118,22 @@ public class SearchSchema {
 
     public void setBooleanValues(Map<String, Boolean> booleanValues) {
         this.booleanValues = booleanValues;
+    }
+
+    public Set<String> getIsNullFields() {
+        return isNullFields;
+    }
+
+    public void setIsNullFields(Set<String> isNullFields) {
+        this.isNullFields = isNullFields;
+    }
+
+    public Set<String> getIsNotNullFields() {
+        return isNotNullFields;
+    }
+
+    public void setIsNotNullFields(Set<String> isNotNullFields) {
+        this.isNotNullFields = isNotNullFields;
     }
 
 }

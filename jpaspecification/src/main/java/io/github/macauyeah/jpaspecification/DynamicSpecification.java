@@ -88,6 +88,12 @@ public class DynamicSpecification {
                         searchSchema,
                         path,
                         builder));
+
+        predicates.addAll(
+                getNullCheckPredicates(
+                        searchSchema,
+                        path,
+                        builder));
         return predicates;
     }
 
@@ -170,6 +176,19 @@ public class DynamicSpecification {
         return predicates;
     }
 
+    private static List<Predicate> getNullCheckPredicates(
+            SearchSchema searchSchema,
+            Path<?> path,
+            CriteriaBuilder builder) {
+        List<Predicate> predicates = searchSchema.getIsNullFields().stream()
+                .map((key) -> builder.isNull(path.get(key)))
+                .collect(Collectors.toList());
+        predicates.addAll(searchSchema.getIsNotNullFields().stream()
+                .map((key) -> builder.isNotNull(path.get(key)))
+                .collect(Collectors.toList()));
+        return predicates;
+    }
+
     private static Predicate generateStringLikePredicate(
             Path<?> path, CriteriaBuilder cb, String key, String value) {
         return cb.like(path.get(key), "%" + value + "%");
@@ -211,6 +230,7 @@ public class DynamicSpecification {
     private static <Y> Predicate generateEqualPredicate(
             Path<?> path, CriteriaBuilder cb, String key, Y value) {
         if (value == null) {
+            // use searchSchema.setIsNullFields(...) to express null check explicitly
             return cb.isNull(path.<Y>get(key));
         } else {
             return cb.equal(path.<Y>get(key), value);
